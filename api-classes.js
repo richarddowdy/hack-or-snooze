@@ -44,9 +44,19 @@ class StoryList {
    */
 
   async addStory(user, newStory) {
-    // TODO - Implement this functions!
-    // this function should return the newly created story so it can be used in
-    // the script.js file where it will be appended to the DOM
+    const config = {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    };
+    const data = {
+      token: user.loginToken,
+      story: newStory
+    }
+    let storyResponse = await axios.post(`${BASE_URL}/stories`, data, config);
+    let storyInstance = new Story(storyResponse.data.story);
+    console.log('api:', storyInstance);
+    return storyInstance;
   }
 }
 

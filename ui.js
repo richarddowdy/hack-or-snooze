@@ -99,8 +99,8 @@ $(async function () {
 
   $navFavButton.on("click", function () {
     // Show the Submit Forms
+    hideElements();
     $favoritedArticles.show();
-    $allStoriesList.hide();
   });
 
   /**
@@ -109,8 +109,8 @@ $(async function () {
 
   $navOwnStoriesButton.on("click", function () {
     // Show the Submit Forms
+    hideElements();
     $ownStories.show();
-    $allStoriesList.hide();
   });
 
 
@@ -122,6 +122,28 @@ $(async function () {
     hideElements();
     await generateStories();
     $allStoriesList.show();
+  });
+
+  /**
+  * Event handler for Adding New Stories
+  */
+
+  $submitForm.on("submit", async function (e) {
+    e.preventDefault();
+    
+    const newStory = {
+      author: $("#author").val(),
+      title: $("#title").val(),
+      url: $("#url").val()
+    };
+
+    let storyInstance = await storyList.addStory(currentUser, newStory);
+    storyList.stories.unshift(storyInstance);
+    let $storyElement = generateStoryHTML(storyInstance);
+    $allStoriesList.prepend($storyElement);
+    $allStoriesList.children().last().remove();
+    $submitForm[0].reset();
+    $submitForm.slideToggle();
   });
 
   /**
