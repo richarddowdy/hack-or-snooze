@@ -6,8 +6,12 @@ $(async function () {
   const $loginForm = $("#login-form");
   const $createAccountForm = $("#create-account-form");
   const $ownStories = $("#my-articles");
+  const $favoritedArticles = $("#favorited-articles");
   const $navWelcome = $("#nav-welcome");
   const $navUserProfile = $("#nav-user-profile");
+  const $navSubmitButton = $("#nav-story-submit");
+  const $navFavButton = $("#nav-user-favorites");
+  const $navOwnStoriesButton = $("#nav-user-my-stories");
   const $navLogin = $("#nav-login");
   const $navLogOut = $("#nav-logout");
 
@@ -79,6 +83,36 @@ $(async function () {
     $createAccountForm.slideToggle();
     $allStoriesList.toggle();
   });
+  
+  /**
+   * Event Handler for Clicking Submit
+   */
+
+  $navSubmitButton.on("click", function () {
+    // Show the Submit Forms
+    $submitForm.slideToggle();
+  });
+
+  /**
+   * Event Handler for Clicking Favorites
+   */
+
+  $navFavButton.on("click", function () {
+    // Show the Submit Forms
+    $favoritedArticles.show();
+    $allStoriesList.hide();
+  });
+
+  /**
+  * Event Handler for Clicking My Stories
+  */
+
+  $navOwnStoriesButton.on("click", function () {
+    // Show the Submit Forms
+    $ownStories.show();
+    $allStoriesList.hide();
+  });
+
 
   /**
    * Event handler for Navigation to Homepage
@@ -189,11 +223,10 @@ $(async function () {
 
   function showNavForLoggedInUser() {
     $navLogin.hide();
-    $navLogOut.show();
-    $navUserProfile.show();
     $navUserProfile.text(currentUser.name);
-    //$navWelcome.text(currentUser.name);
     $navWelcome.show();
+    $navUserProfile.show();
+    $navLogOut.show();
   }
 
   /* simple function to pull the hostname from a URL */
@@ -212,7 +245,7 @@ $(async function () {
   }
 
   /* sync current user information to localStorage */
-  
+
   function syncCurrentUserToLocalStorage() {
     if (currentUser) {
       localStorage.setItem("token", currentUser.loginToken);
