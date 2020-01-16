@@ -6,6 +6,8 @@ $(async function() {
   const $loginForm = $("#login-form");
   const $createAccountForm = $("#create-account-form");
   const $ownStories = $("#my-articles");
+  const $navWelcome = $("#nav-welcome");
+  const $navUserProfile = $("#nav-user-profile");
   const $navLogin = $("#nav-login");
   const $navLogOut = $("#nav-logout");
 
@@ -189,6 +191,10 @@ $(async function() {
   function showNavForLoggedInUser() {
     $navLogin.hide();
     $navLogOut.show();
+    $navUserProfile.show();
+    $navUserProfile.text(currentUser.name);
+    //$navWelcome.text(currentUser.name);
+    $navWelcome.show();
   }
 
   /* simple function to pull the hostname from a URL */

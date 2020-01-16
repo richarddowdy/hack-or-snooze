@@ -1,0 +1,5 @@
+curl -i \
+     -H "Content-Type: application/json" \
+     -X POST \
+     -d '{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJpY2hhcmQtZ2VvcmdlIiwiaWF0IjoxNTc5MTk2ODM3fQ.70PxsD9466jUCdcMYhOmE8BBt27TSYOyNm0y1CSqZbc", "story": {"author":"Richard-George","title":"TEST POST", "url": "https://www.google.com"} }' \
+      https://hack-or-snooze-v3.herokuapp.com/stories
