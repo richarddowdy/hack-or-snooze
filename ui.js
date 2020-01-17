@@ -100,6 +100,13 @@ $(async function () {
   $navFavButton.on("click", function () {
     // Show the Submit Forms
     hideElements();
+    $favoritedArticles.empty();
+
+    for(let story of currentUser.favorites){
+      const result = generateStoryHTML(story);
+      $favoritedArticles.append(result);
+    }
+
     $favoritedArticles.show();
   });
 
@@ -180,6 +187,9 @@ $(async function () {
     $loginForm.trigger("reset");
     $createAccountForm.trigger("reset");
 
+    // load and show favorited articles after login
+    generateStories();
+
     // show the stories
     $allStoriesList.show();
 
@@ -207,44 +217,39 @@ $(async function () {
     }
   }
 
-  $allStoriesList.on("click", ".far", function(e){
+  $allStoriesList.on("click", ".far", async function(e){
     if(currentUser === null){
       return;
     }
-    e.target.classList.remove("far");
-    e.target.classList.add("fas");
     let favStoryId = $(e.target).parent().attr("id");
     
-    addStoryToFavoritesUI(favStoryId);
-    currentUser.addStoryToFavoritesAPI(favStoryId);
+    //addStoryToFavoritesUI(favStoryId);
+    currentUser.favorites = await currentUser.addStoryToFavoritesAPI(favStoryId);
+
+    e.target.classList.remove("far");
+    e.target.classList.add("fas");
   })
 
-  $allStoriesList.on("click", ".fas", function(e){
+  $allStoriesList.on("click", ".fas", async function(e){
+    let favStoryId = $(e.target).parent().attr("id");
+    
+    currentUser.favorites = await currentUser.removeStoryFromFavoritesAPI(favStoryId);
+    
+    //remove from favorites
     e.target.classList.remove("fas");
     e.target.classList.add("far");
-    let favStoryId = $(e.target).parent().attr("id");
-
-    currentUser.removeStoryFromFavoritesAPI(favStoryId);
-    removeStoryFromFavoritesUI(favStoryId);
-    //remove from favorites
   })
 
+  $favoritedArticles.on("click", ".fas", async function(e){
+    
+    let favStoryId = $(e.target).parent().attr("id");
 
-  function addStoryToFavoritesUI(id) {
-    for (let story of storyList.stories){
-      if(story.storyId === id){
-        currentUser.favorites.push(story);
-      }
-    }
-  }
+    currentUser.favorites = await currentUser.removeStoryFromFavoritesAPI(favStoryId);
+    //remove from favorites
 
-  function removeStoryFromFavoritesUI(id){
-    for(let story of currentUser.favorites){
-      if(story.storyId === id){
-        currentUser.favorites.splice(currentUser.favorites.indexOf(story),1);
-      }
-    }
-  }
+    $(e.target).parent().remove();
+  })
+
 
   /**
    * A function to render HTML for an individual Story instance
@@ -287,7 +292,8 @@ $(async function () {
       $filteredArticles,
       $ownStories,
       $loginForm,
-      $createAccountForm
+      $createAccountForm,
+      $favoritedArticles
     ];
     elementsArr.forEach($elem => $elem.hide());
   }

@@ -166,7 +166,8 @@ class User {
     const data = {
       "token": this.loginToken
     }
-    await axios.post(`${BASE_URL}/users/${this.username}/favorites/${id}`, data);
+    let response = await axios.post(`${BASE_URL}/users/${this.username}/favorites/${id}`, data);
+    return response.data.user.favorites;// array of favorites from API after adding
   }
 
   async removeStoryFromFavoritesAPI(id) {
@@ -175,7 +176,8 @@ class User {
         "token": this.loginToken
       }
     }
-    await axios.delete(`${BASE_URL}/users/${this.username}/favorites/${id}`, params);
+    let response = await axios.delete(`${BASE_URL}/users/${this.username}/favorites/${id}`, params);
+    return response.data.user.favorites; // array of favorites from API after removal
   }
 }
 
