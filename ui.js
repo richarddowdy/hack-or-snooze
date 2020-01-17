@@ -41,7 +41,6 @@ $(async function () {
     currentUser = userInstance;
     syncCurrentUserToLocalStorage();
     loginAndSubmitForm();
-    debugger
   });
 
   /**
@@ -257,7 +256,7 @@ $(async function () {
 
   
 
-debugger
+
 
   /**
    * A function to render HTML for an individual Story instance

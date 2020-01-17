@@ -170,10 +170,11 @@ class User {
   }
 
   async removeStoryFromFavoritesAPI(id){
-    console.log("working")
     const data = {
       "token": this.loginToken
     };
+    
+    console.log(this.loginToken);
     let test = await axios.delete(`${BASE_URL}/users/${this.username}/favorites/${id}`, data);
     console.log(test);
   }
