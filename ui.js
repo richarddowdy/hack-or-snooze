@@ -117,6 +117,13 @@ $(async function () {
   $navOwnStoriesButton.on("click", function () {
     // Show the Submit Forms
     hideElements();
+    $ownStories.empty();
+
+    for (let story of currentUser.ownStories) {
+      const result = generateStoryHTML(story);
+      $ownStories.append(result);
+    }
+
     $ownStories.show();
   });
 
@@ -145,6 +152,7 @@ $(async function () {
     };
 
     let storyInstance = await storyList.addStory(currentUser, newStory);
+    currentUser.ownStories.push(storyInstance);
     storyList.stories.unshift(storyInstance);
     let $storyElement = generateStoryHTML(storyInstance);
     $allStoriesList.prepend($storyElement);
@@ -217,37 +225,23 @@ $(async function () {
     }
   }
 
-  $allStoriesList.on("click", ".far", async function(e){
-    if(currentUser === null){
-      return;
+  /**
+   * A rendering function to update the favorites list on the API, 
+   * local user favorites array, and the DOM element.
+   *
+   */
+
+  $(".articles-container").on("click", ".fa-star", async function (e) {
+    let favStoryId = $(e.target).parent().attr("id");
+    if ($(e.target).hasClass("fas")){
+      currentUser.favorites = await currentUser.removeStoryFromFavoritesAPI(favStoryId);
+    } else {
+      currentUser.favorites = await currentUser.addStoryToFavoritesAPI(favStoryId);
     }
-    let favStoryId = $(e.target).parent().attr("id");
-    
-    //addStoryToFavoritesUI(favStoryId);
-    currentUser.favorites = await currentUser.addStoryToFavoritesAPI(favStoryId);
-
-    e.target.classList.remove("far");
-    e.target.classList.add("fas");
-  })
-
-  $allStoriesList.on("click", ".fas", async function(e){
-    let favStoryId = $(e.target).parent().attr("id");
-    
-    currentUser.favorites = await currentUser.removeStoryFromFavoritesAPI(favStoryId);
-    
-    //remove from favorites
-    e.target.classList.remove("fas");
-    e.target.classList.add("far");
-  })
-
-  $favoritedArticles.on("click", ".fas", async function(e){
-    
-    let favStoryId = $(e.target).parent().attr("id");
-
-    currentUser.favorites = await currentUser.removeStoryFromFavoritesAPI(favStoryId);
-    //remove from favorites
-
-    $(e.target).parent().remove();
+    $(e.target).toggleClass("fas far");
+    if ($(e.target).parent().parent().attr("id") === "favorited-articles"){
+      $(e.target).parent().remove();
+    }
   })
 
 
@@ -258,6 +252,7 @@ $(async function () {
   function generateStoryHTML(story) {
     let hostName = getHostName(story.url);
     let starFill = "far";
+    let button = '';
     //checks if user already defined
     if(currentUser){
       for(let favStory of currentUser.favorites){
@@ -266,14 +261,24 @@ $(async function () {
         }
       }
     }
+
+    for (let userStory of currentUser.ownStories){
+      if (userStory.storyId === story.storyId){
+        button = '<i class="fas fa-trash"></i>'
+      }
+    }
+  
+  
+    
      
     //render story markup
     const storyMarkup = $(`
       <li id="${story.storyId}">
-        <i class="${starFill} fa-star" ></i>
-        <a class="article-link" href="${story.url}" target="a_blank">
-          <strong>${story.title}</strong>
-        </a>
+      <i class="${starFill} fa-star" ></i>
+      <a class="article-link" href="${story.url}" target="a_blank">
+        <strong>${story.title}</strong>
+      </a>
+      ${button}
         <small class="article-author">by ${story.author}</small>
         <small class="article-hostname ${hostName}">(${hostName})</small>
         <small class="article-username">posted by ${story.username}</small>
