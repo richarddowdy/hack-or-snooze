@@ -217,7 +217,6 @@ $(async function () {
     
     addStoryToFavoritesUI(favStoryId);
     currentUser.addStoryToFavoritesAPI(favStoryId);
-    
   })
 
   $allStoriesList.on("click", ".fas", function(e){
@@ -237,8 +236,6 @@ $(async function () {
         currentUser.favorites.push(story);
       }
     }
-    console.log(storyList.stories);
-    console.log(currentUser.favorites);
   }
 
   function removeStoryFromFavoritesUI(id){
@@ -247,16 +244,7 @@ $(async function () {
         currentUser.favorites.splice(currentUser.favorites.indexOf(story),1);
       }
     }
-    console.log(currentUser.favorites);
   }
-
-
-  
-
-
-  
-
-
 
   /**
    * A function to render HTML for an individual Story instance

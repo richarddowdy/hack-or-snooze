@@ -55,7 +55,6 @@ class StoryList {
     }
     let storyResponse = await axios.post(`${BASE_URL}/stories`, data, config);
     let storyInstance = new Story(storyResponse.data.story);
-    console.log('api:', storyInstance);
     return storyInstance;
   }
 }
@@ -162,20 +161,15 @@ class User {
     return existingUser;
   }
 
-  
-  async addStoryToFavoritesAPI(id){
-    console.log(id);
-      const data = {
-        "token": this.loginToken
-      }
+
+  async addStoryToFavoritesAPI(id) {
+    const data = {
+      "token": this.loginToken
+    }
     await axios.post(`${BASE_URL}/users/${this.username}/favorites/${id}`, data);
   }
 
-  async removeStoryFromFavoritesAPI(id){
-    console.log(id);
-    // const data = {
-    //   "token": this.loginToken
-    // };
+  async removeStoryFromFavoritesAPI(id) {
     const params = {
       data: {
         "token": this.loginToken
@@ -183,21 +177,6 @@ class User {
     }
     await axios.delete(`${BASE_URL}/users/${this.username}/favorites/${id}`, params);
   }
-  // async removeStoryFromFavoritesAPI(id){
-  //   const data = {
-  //     "token": this.loginToken
-  //   };
-  //   const config = {
-  //     headers: {
-  //       "Content-Type": "application/json"
-  //     }
-  //   };
-    
-  //   console.log(this.loginToken);
-  //   let test = await axios.delete(`${BASE_URL}/users/${this.username}/favorites/${id}`, data, {headers: {"Content-Type":"application/json"}});
-  //   console.log(test);
-  // }
-  
 }
 
 /**
