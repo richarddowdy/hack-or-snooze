@@ -152,10 +152,13 @@ $(async function () {
     };
 
     let storyInstance = await storyList.addStory(currentUser, newStory);
-    currentUser.ownStories.push(storyInstance);
-    storyList.stories.unshift(storyInstance);
+    currentUser.ownStories.unshift(storyInstance);
+    storyList.stories.unshift(storyInstance)
+
     let $storyElement = generateStoryHTML(storyInstance);
     $allStoriesList.prepend($storyElement);
+    $ownStories.prepend($storyElement);
+
     $allStoriesList.children().last().remove();
     $submitForm[0].reset();
     $submitForm.slideToggle();
@@ -226,9 +229,8 @@ $(async function () {
   }
 
   /**
-   * A rendering function to update the favorites list on the API, 
-   * local user favorites array, and the DOM element.
-   *
+   * UpdateS the favorites list on the API, local user favorites array, 
+   * and the DOM element.
    */
 
   $(".articles-container").on("click", ".fa-star", async function (e) {
@@ -244,6 +246,26 @@ $(async function () {
     }
   })
 
+/**
+ * Deletes an article from the API, 3 article arrays 
+ * (all, favorites, and own), and from the DOM
+ */
+
+  $(".articles-container").on("click", ".fa-trash", async function (e) {
+    if(currentUser) {
+      let removeStoryId = $(e.target).parent().attr("id");
+      let allStories = storyList.stories;
+      let favStories = currentUser.favorites;
+      let ownStories = currentUser.ownStories;
+
+      await storyList.removeStory(currentUser, removeStoryId);
+
+      allStories = allStories.filter(story => story.storyId !== removeStoryId);
+      favStories = favStories.filter(story => story.storyId !== removeStoryId);
+      ownStories = ownStories.filter(story => story.storyId !== removeStoryId);
+      $(e.target).parent().remove();
+    }   
+  })
 
   /**
    * A function to render HTML for an individual Story instance
@@ -260,16 +282,12 @@ $(async function () {
           starFill = "fas";
         }
       }
-    }
-
-    for (let userStory of currentUser.ownStories){
-      if (userStory.storyId === story.storyId){
-        button = '<i class="fas fa-trash"></i>'
+      for (let userStory of currentUser.ownStories){
+        if (userStory.storyId === story.storyId){
+          button = '<i class="fas fa-trash"></i>'
+        }
       }
     }
-  
-  
-    
      
     //render story markup
     const storyMarkup = $(`
