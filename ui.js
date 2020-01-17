@@ -41,6 +41,7 @@ $(async function () {
     currentUser = userInstance;
     syncCurrentUserToLocalStorage();
     loginAndSubmitForm();
+    debugger
   });
 
   /**
@@ -207,16 +208,77 @@ $(async function () {
     }
   }
 
+  $allStoriesList.on("click", ".far", function(e){
+    if(currentUser === null){
+      return;
+    }
+    e.target.classList.remove("far");
+    e.target.classList.add("fas");
+    let favStoryId = $(e.target).parent().attr("id");
+    
+    addStoryToFavoritesUI(favStoryId);
+    currentUser.addStoryToFavoritesAPI(favStoryId);
+    
+  })
+
+  $allStoriesList.on("click", ".fas", function(e){
+    e.target.classList.remove("fas");
+    e.target.classList.add("far");
+    let favStoryId = $(e.target).parent().attr("id");
+
+    removeStoryFromFavoritesUI(favStoryId);
+    currentUser.removeStoryFromFavoritesAPI(favStoryId);
+    //remove from favorites
+  })
+
+
+  function addStoryToFavoritesUI(id) {
+    for (let story of storyList.stories){
+      if(story.storyId === id){
+        currentUser.favorites.push(story);
+      }
+    }
+    console.log(storyList.stories);
+    console.log(currentUser.favorites);
+  }
+
+  function removeStoryFromFavoritesUI(id){
+    for(let story of currentUser.favorites){
+      if(story.storyId === id){
+        currentUser.favorites.splice(currentUser.favorites.indexOf(story),1);
+      }
+    }
+    console.log(currentUser.favorites);
+  }
+
+
+  
+
+
+  
+
+debugger
+
   /**
    * A function to render HTML for an individual Story instance
    */
 
   function generateStoryHTML(story) {
     let hostName = getHostName(story.url);
-
-    // render story markup
+    let starFill = "far";
+    //checks if user already defined
+    if(currentUser){
+      for(let favStory of currentUser.favorites){
+        if(favStory.storyId === story.storyId){
+          starFill = "fas";
+        }
+      }
+    }
+     
+    //render story markup
     const storyMarkup = $(`
       <li id="${story.storyId}">
+        <i class="${starFill} fa-star" ></i>
         <a class="article-link" href="${story.url}" target="a_blank">
           <strong>${story.title}</strong>
         </a>
