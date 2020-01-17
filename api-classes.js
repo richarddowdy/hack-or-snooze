@@ -162,7 +162,9 @@ class User {
     return existingUser;
   }
 
+  
   async addStoryToFavoritesAPI(id){
+    console.log(id);
     const data = {
       "token": this.loginToken
     };
@@ -170,14 +172,26 @@ class User {
   }
 
   async removeStoryFromFavoritesAPI(id){
+    console.log(id);
     const data = {
       "token": this.loginToken
     };
-    
-    console.log(this.loginToken);
-    let test = await axios.delete(`${BASE_URL}/users/${this.username}/favorites/${id}`, data);
-    console.log(test);
+    await axios.delete(`${BASE_URL}/users/${this.username}/favorites/${id}`, data);
   }
+  // async removeStoryFromFavoritesAPI(id){
+  //   const data = {
+  //     "token": this.loginToken
+  //   };
+  //   const config = {
+  //     headers: {
+  //       "Content-Type": "application/json"
+  //     }
+  //   };
+    
+  //   console.log(this.loginToken);
+  //   let test = await axios.delete(`${BASE_URL}/users/${this.username}/favorites/${id}`, data, {headers: {"Content-Type":"application/json"}});
+  //   console.log(test);
+  // }
   
 }
 
