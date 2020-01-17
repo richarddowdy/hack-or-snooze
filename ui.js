@@ -225,8 +225,8 @@ $(async function () {
     e.target.classList.add("far");
     let favStoryId = $(e.target).parent().attr("id");
 
-    removeStoryFromFavoritesUI(favStoryId);
     currentUser.removeStoryFromFavoritesAPI(favStoryId);
+    removeStoryFromFavoritesUI(favStoryId);
     //remove from favorites
   })
 
