@@ -104,8 +104,24 @@
   <section id="user-profile" class="container" style="display:none">
     <h4>User Profile Info</h4>
     <section>
-      <div id="profile-name">Name:</div>
-      <div id="profile-username">Username:</div>
+      <div>
+        <div style="display:inline; margin-right:40px" id="profile-name">Name:</div>
+          <form action="#" id="name-form" class="hidden">
+            <input type="text" placeholder="New Name" id="new-name">
+            <input type="submit" value="Submit">
+            <input type="button" value="Cancel">
+          </form>
+        <i style="display:inline" id="profile-edit-name" class="fas fa-edit"></i>
+      </div>
+      <div>
+        <div style="display:inline; margin-right: 40px" id="profile-username">Username:</div>
+          <form action="#" id="username-form" class="hidden">
+            <input type="text" placeholder="New Username">
+            <input type="submit" value="Submit">
+            <input type="button" value="Cancel">
+          </form>
+        <i style="display:inline" id="profile-edit-username" class="fas fa-edit"></i>
+      </div>
       <div id="profile-account-date">Account Created:</div>
     </section>
   </section>

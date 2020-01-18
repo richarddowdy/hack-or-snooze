@@ -14,6 +14,7 @@ $(async function () {
   const $navOwnStoriesButton = $("#nav-user-my-stories");
   const $navLogin = $("#nav-login");
   const $navLogOut = $("#nav-logout");
+  const $userProfile = $("#user-profile");
 
   // global storyList variable
   let storyList = null;
@@ -127,7 +128,32 @@ $(async function () {
     $ownStories.show();
   });
 
+  //Event handler for the User Profile button in the navbar
+  $navUserProfile.on("click", function(){
+    hideElements();
+    
+    if(currentUser){
+      $("#profile-name").text(`name: ${currentUser.name}`); 
+      $("#profile-username").text(`username: ${currentUser.username}`); 
+      $("#profile-account-date").text(`account created: ${currentUser.createdAt.slice(0,10)}`); 
+    }
+    $userProfile.show();
+  });
 
+  $("#profile-edit-name").on("click", function(){
+    $("#name-form").show();
+    $("#profile-edit-name").hide();
+  })
+
+  $("#name-form").on("submit", async function(e){
+    let newName = $("#new-name").val();
+
+    await currentUser.updateName(newName);
+    currentUser.name = newName;
+
+    location.reload();
+  })
+  
   /**
    * Event handler for Navigation to Homepage
    */
@@ -310,6 +336,7 @@ $(async function () {
 
   function hideElements() {
     const elementsArr = [
+      $userProfile,
       $submitForm,
       $allStoriesList,
       $filteredArticles,

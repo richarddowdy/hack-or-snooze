@@ -188,6 +188,17 @@ class User {
     let response = await axios.delete(`${BASE_URL}/users/${this.username}/favorites/${id}`, params);
     return response.data.user.favorites; // array of favorites from API after removal
   }
+
+  async updateName(newName){
+    const data = {
+      "token": this.loginToken,
+      user: {
+        name: newName
+      }
+    }
+
+    await axios.patch(`${BASE_URL}/users/${this.username}`, data);
+  }
 }
 
 /**
